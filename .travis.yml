@@ -37,10 +37,10 @@ before_install:
   - git status
     
   # replace the content of the library with the currently tested repo
-  - cd && pwd
+  - cd && pwd && ls
   - rm -rf $BOOST/libs/graph
-  - cd $TRAVIS_REPO_SLUG && cd ..
-  - mv graph ../$BOOST/libs/
+  - cd $TRAVIS_BUILD_DIR && cd ..
+  - mv graph $HOME/$BOOST/libs/
 
   # build b2 and create headers
   - cd && cd $BOOST
