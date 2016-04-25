@@ -20,10 +20,11 @@ addons:
     - build-essential
 
 env:
-  - BOOST_BRANCH=$([[ "$TRAVIS_BRANCH" = "master" ]] && echo master || echo develop)
-  - BOOST=boost-local # must be different from graph/boost dir name
-  - BOOST_ROOT=$PROJECT_ROOT/$BOOST_DIR
-  - GRAPH=graph-local
+  global:
+    - BOOST_BRANCH=$([[ "$TRAVIS_BRANCH" = "master" ]] && echo master || echo develop)
+    - BOOST=boost-local # must be different from graph/boost dir name
+    - BOOST_ROOT=$PROJECT_ROOT/$BOOST_DIR
+    - GRAPH=graph-local
 
 before_install:
   # move graph repo to other temp dir; we will move it to $BOOST then
