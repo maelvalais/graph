@@ -1,0 +1,61 @@
+# Use, modification, and distribution are
+# subject to the Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+#
+# Copyright Antony Polukhin 2014.
+# Copyright Adam Wulkiewicz 2015-2016.
+
+general:
+  branches:
+    only:
+      - master
+      - develop
+      - test
+language: c++
+addons:
+  apt:
+    packages:
+    - gcc-4.9
+    - g++-4.9 
+    - build-essential
+
+env:
+  - BOOST_BRANCH=$([[ "$TRAVIS_BRANCH" = "master" ]] && echo master || echo develop)
+  - BOOST=boost-local # must be different from graph/boost dir name
+  - BOOST_ROOT=$PROJECT_ROOT/$BOOST_DIR
+  - GRAPH=graph-local
+
+before_install:
+  # move graph repo to other temp dir; we will move it to $BOOST then
+  - mkdir $GRAPH
+  - mv * $GRAPH
+  # clone boost repository
+  - cd
+  - mkdir $BOOST && cd $BOOST
+  - git init .
+  - git remote add --no-tags -t $BOOST_BRANCH origin https://github.com/boostorg/boost.git
+  - git fetch --depth=1
+  - git checkout $BOOST_BRANCH
+  - git submodule update --init --merge
+  - git remote set-branches --add origin $BOOST_BRANCH
+  - git pull --recurse-submodules
+  - git submodule update --init
+  - git checkout $BOOST_BRANCH
+  - git submodule foreach "git reset --quiet --hard; git clean -fxd"
+  - git reset --hard; git clean -fxd
+  - git status
+    
+  # replace the content of the library with the currently tested repo
+  - cd
+  - rm -rf $BOOST/libs/graph/*
+  - mv $GRAPH/* $BOOST/libs/graph
+
+  # build b2 and create headers
+  - cd && cd $BOOST
+  - ./bootstrap.sh
+  - ./b2 headers
+
+# This part is meant for unit tests
+script:
+  - cd && cd boost/libs/graph/test
+  - ../../../b2 
