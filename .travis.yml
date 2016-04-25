@@ -11,13 +11,8 @@ general:
       - master
       - develop
       - test
-language: c++
-addons:
-  apt:
-    packages:
-    - gcc-4.9
-    - g++-4.9 
-    - build-essential
+language: c
+compiler: gcc
 
 env:
   global:
