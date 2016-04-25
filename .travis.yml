@@ -49,5 +49,5 @@ before_install:
 
 # This part is meant for unit tests
 script:
-  - cd && cd boost/libs/graph/test
-  - ../../../b2 
+  - cd $HOME/$BOOST/libs/graph/test
+  - ../../../b2
