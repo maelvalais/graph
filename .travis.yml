@@ -18,8 +18,6 @@ env:
   global:
     - BOOST_BRANCH=$([[ "$TRAVIS_BRANCH" = "master" ]] && echo master || echo develop)
     - BOOST=boost-local # must be different from graph/boost dir name
-    - BOOST_ROOT=$PROJECT_ROOT/$BOOST_DIR
-    - GRAPH=graph-local
 
 before_install:
   # clone boost repository
@@ -39,7 +37,7 @@ before_install:
   - git status
     
   # replace the content of the library with the currently tested repo
-  - cd
+  - cd && pwd
   - rm -rf $BOOST/libs/graph
   - cd $TRAVIS_REPO_SLUG && cd ..
   - mv graph ../$BOOST/libs/
