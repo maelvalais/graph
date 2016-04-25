@@ -22,9 +22,6 @@ env:
     - GRAPH=graph-local
 
 before_install:
-  # move graph repo to other temp dir; we will move it to $BOOST then
-  - mkdir $GRAPH
-  - mv * $GRAPH
   # clone boost repository
   - cd
   - mkdir $BOOST && cd $BOOST
@@ -43,8 +40,9 @@ before_install:
     
   # replace the content of the library with the currently tested repo
   - cd
-  - rm -rf $BOOST/libs/graph/*
-  - mv $GRAPH/* $BOOST/libs/graph
+  - rm -rf $BOOST/libs/graph
+  - cd $TRAVIS_REPO_SLUG && cd ..
+  - mv graph ../$BOOST/libs/
 
   # build b2 and create headers
   - cd && cd $BOOST
